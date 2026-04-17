@@ -17,7 +17,12 @@ category:{type: String,
 isPinned:{type:Boolean, default:false}
 })
 
+
 // model 
+
+// bulk post --> 
+
+
 
 const Note = mongoose.model("Note",NoteSchema);
 
