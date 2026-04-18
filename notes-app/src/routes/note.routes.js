@@ -9,5 +9,6 @@ NoteRouter.get("/test", (req, res) => {
 
 NoteRouter.post("/create", NoteController.CreateNote);
 NoteRouter.post("/bulk-create", NoteController.createNotesBulk);
+NoteRouter.get("/", NoteController.getAllNotes);
 
 module.exports = NoteRouter;

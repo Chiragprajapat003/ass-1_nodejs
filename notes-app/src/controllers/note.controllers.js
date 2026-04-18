@@ -1,8 +1,9 @@
+const { default: mongoose } = require("mongoose");
+const Note = require("../models/note.model");
 
-const Note = require("../models/note.model")
-
+// post 1 data -> 1
 const CreateNote = async (req, res) => {
-  const { title, content, category, isPinned } = req.body;
+  const { title, content, category, isPinned } = req.body || {};
 
   try {
     if (!title || !content) {
@@ -24,15 +25,25 @@ const CreateNote = async (req, res) => {
   } catch (err) {
     return res.status(500).json({
       success: false,
-      message: 'Server error',
+      message: "Server error",
       error: err.message,
     });
   }
 };
 
+// post bulk data ->2
+
 const createNotesBulk = async (req, res) => {
   try {
-    const { notes } = req.body;
+    const { notes } = req.body || {};
+
+    if (!req.body) {
+      return res.status(400).json({
+        success: false,
+        message: "Request body is required. Send valid JSON.",
+        data: null,
+      });
+    }
 
     if (!notes || !Array.isArray(notes) || notes.length === 0) {
       return res.status(400).json({
@@ -68,7 +79,34 @@ const createNotesBulk = async (req, res) => {
   }
 };
 
+// getall notes --> 3
+
+const getAllNotes = async (req, res) => {
+  try {
+    const notes = await Note.find();
+
+    return res.status(200).json({
+      success: true,
+      message: "Notes fetched successfully",
+      data: notes,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      data: null,
+    });
+  }
+};
+
+
 module.exports = {
   CreateNote,
   createNotesBulk,
+  getAllNotes,
+  getbyID,
+  replaceNote,
+  updateField,
+  deleteSingleNote,
+  deleteMultiNote,
 };
