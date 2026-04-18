@@ -256,6 +256,24 @@ const updateField = async (req, res) => {
   }
 };
 
+// delete many -- delete /api/notes/bulk
+const deleteMultiNote = async (req, res) => {
+    try {
+        const { ids } = req.body || {};
+        if (!Array.isArray(ids) || ids.length === 0) {
+            return res.status(400).json({ msg: 'Provide an array of note ids' });
+        }
+        await Note.deleteMany({ _id: { $in: ids } });
+        res.status(200).json({ msg: 'Notes deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ msg: 'Server error.', error: error.message });
+    }
+};
+
+
+
+
+
 module.exports = {
   CreateNote,
   createNotesBulk,
@@ -263,4 +281,5 @@ module.exports = {
   getbyID,
   replaceNote,
   updateField,
+  deleteMultiNote,
 };
