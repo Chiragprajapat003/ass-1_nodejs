@@ -1,7 +1,7 @@
 # Notes App API
 
 <p align="center">
-  <img src="./assets/notes-logo.svg" alt="Notes App Logo" width="180" />
+  <img src="./notes-app/assets/notes-logo.svg" alt="Notes App Logo" width="180" />
 </p>
 
 Simple REST API for creating, reading, updating, and deleting notes using **Node.js**, **Express**, and **MongoDB**.
