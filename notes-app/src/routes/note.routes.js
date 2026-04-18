@@ -11,4 +11,5 @@ NoteRouter.post("/create", NoteController.CreateNote);
 NoteRouter.post("/bulk-create", NoteController.createNotesBulk);
 NoteRouter.get("/", NoteController.getAllNotes);
 NoteRouter.get("/:id", NoteController.getbyID);
+NoteRouter.put("/:id", NoteController.replaceNote);
 module.exports = NoteRouter;
