@@ -14,4 +14,5 @@ NoteRouter.get("/:id", NoteController.getbyID);
 NoteRouter.put("/:id", NoteController.replaceNote);
 NoteRouter.patch("/:id", NoteController.updateField);
 NoteRouter.delete("/bulk", NoteController.deleteMultiNote);
+NoteRouter.delete("/:id", NoteController.deleteSingleNote);
 module.exports = NoteRouter;

@@ -272,6 +272,17 @@ const deleteMultiNote = async (req, res) => {
 
 
 
+// delete one -- delete /api/notes/:id
+const deleteSingleNote = async (req, res) => {
+    try {
+        const note = await Note.findByIdAndDelete(req.params.id);
+        if (!note) return res.status(404).json({ msg: 'Note not found' });
+        res.status(200).json({ msg: 'Note deleted successfully', note });
+    } catch (error) {
+        res.status(500).json({ msg: 'Server error.', error: error.message });
+    }
+};
+
 
 
 module.exports = {
@@ -282,4 +293,5 @@ module.exports = {
   replaceNote,
   updateField,
   deleteMultiNote,
+  deleteSingleNote,
 };
