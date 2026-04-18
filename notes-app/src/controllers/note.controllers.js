@@ -194,10 +194,73 @@ const replaceNote = async (req, res) => {
     });
   }
 };
+
+
+
+
+// update -- patch /api/notes/:id
+const updateField = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ msg: "Invalid note id" });
+    }
+
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(400).json({
+        msg: "Request body is required. Send valid JSON with fields to update.",
+      });
+    }
+
+    const allowedFields = ["title", "content", "category", "isPinned"];
+    const incomingFields = Object.keys(req.body);
+    const isValidFieldSet = incomingFields.every((field) =>
+      allowedFields.includes(field)
+    );
+
+    if (!isValidFieldSet) {
+      return res.status(400).json({
+        msg: "Invalid field(s) in request body",
+        allowedFields,
+      });
+    }
+
+    const updateData = {};
+    for (const field of incomingFields) {
+      if (req.body[field] !== undefined) {
+        updateData[field] = req.body[field];
+      }
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({
+        msg: "No valid fields provided to update",
+      });
+    }
+
+    const note = await Note.findByIdAndUpdate(
+      id,
+      { $set: updateData },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!note) return res.status(404).json({ msg: "Note not found" });
+
+    res.status(200).json({ msg: "Note updated successfully", note });
+  } catch (error) {
+    res.status(500).json({ msg: "Server error.", error: error.message });
+  }
+};
+
 module.exports = {
   CreateNote,
   createNotesBulk,
   getAllNotes,
   getbyID,
   replaceNote,
+  updateField,
 };
