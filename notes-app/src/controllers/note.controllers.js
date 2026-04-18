@@ -99,14 +99,47 @@ const getAllNotes = async (req, res) => {
   }
 };
 
+// Get a single note by ID ---> 4
+
+const getbyID = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const note = await Note.findById(id);
+    if (!note) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found",
+        data: null,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Note fetched successfully",
+      data: note,
+    });
+  } catch (err) {
+    if (err.name === "CastError") {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid note ID",
+        data: null,
+      });
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      data: null,
+    });
+  }
+};
+
 
 module.exports = {
   CreateNote,
   createNotesBulk,
   getAllNotes,
   getbyID,
-  replaceNote,
-  updateField,
-  deleteSingleNote,
-  deleteMultiNote,
+ 
 };
